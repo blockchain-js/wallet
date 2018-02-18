@@ -1,16 +1,12 @@
 import React, { Component } from 'react'
-import Layout from '../components/Layout'
+import Home from './home'
 
-class WalletIndex extends Component {
+class Index extends Component {
   render () {
     return (
-      <Layout>
-        <div>
-          <h3>Wallet</h3>
-        </div>
-      </Layout>
+      <Home />
     )
   }
 }
 
-export default WalletIndex
+export default Index

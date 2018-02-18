@@ -5,7 +5,7 @@
 'use strict'
 
 const bunyan = require('bunyan')
-const log = bunyan.createLogger({name: 'fantasy', level: 'debug'})
+const log = bunyan.createLogger({name: 'wallet', level: 'debug'})
 
 const handle = (err) => {
   // Log to the console

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container } from 'semantic-ui-react'
 import Head from 'next/head'
+import Menu from './Menu.js'
 
 export default props => {
   return (
@@ -12,6 +13,7 @@ export default props => {
         />
       </Head>
 
+      <Menu />
       {props.children}
     </Container>
   )
