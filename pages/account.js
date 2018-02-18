@@ -1,12 +1,24 @@
 import React, { Component } from 'react'
 import Layout from '../components/Layout'
+import { Container, Segment, Header, Form } from 'semantic-ui-react'
 
 class Account extends Component {
   render () {
     return (
       <Layout>
         <div>
-          <h3>Account</h3>
+          <Container text>
+            <Segment color='grey'>
+              <Header as='h4'>View Account Balance</Header>
+              <Form>
+                <Form.Group widths='equal'>
+                  <Form.Input placeholder='Address' />
+                  <Form.Button floated='left'>Balance</Form.Button>
+                </Form.Group>
+                <Form.TextArea />
+              </Form>
+            </Segment>
+          </Container>
         </div>
       </Layout>
     )

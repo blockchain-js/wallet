@@ -22,8 +22,7 @@ class Menu extends Component {
           <SemanticMenu.Item name='create' active={activeItem === 'create'} onClick={this.handleItemClick} />
           <SemanticMenu.Item name='open' active={activeItem === 'open'} onClick={this.handleItemClick} />
           <SemanticMenu.Item name='account' active={activeItem === 'account'} onClick={this.handleItemClick} />
-          <SemanticMenu.Item name='balance' active={activeItem === 'balance'} onClick={this.handleItemClick} />
-          <SemanticMenu.Item name='send' active={activeItem === 'send'} onClick={this.handleItemClick} />
+          <SemanticMenu.Item name='transactions' active={activeItem === 'transactions'} onClick={this.handleItemClick} />
           <SemanticMenu.Menu position='right'>
             <SemanticMenu.Item name='logout' active={activeItem === 'logout'} onClick={this.handleItemClick} />
           </SemanticMenu.Menu>

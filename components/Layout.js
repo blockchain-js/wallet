@@ -14,7 +14,9 @@ export default props => {
       </Head>
 
       <Menu />
-      {props.children}
+      <div style={{'marginTop': 20}}>
+        {props.children}
+      </div>
     </Container>
   )
 }

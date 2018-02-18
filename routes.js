@@ -5,6 +5,5 @@ routes
 .add('create')
 .add('open')
 .add('account')
-.add('balance')
-.add('send')
+.add('transactions')
 .add('logout')
