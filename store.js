@@ -5,7 +5,8 @@ import fetch from 'isomorphic-unfetch'
 
 const _initialState = {
   wallet: undefined,
-  traqnsaction: undefined
+  traqnsaction: undefined,
+  balance: undefined
 }
 
 export const actionTypes = {
@@ -21,11 +22,13 @@ export const actionTypes = {
 // REDUCERS
 export const reducer = (state = _initialState, action) => {
   switch (action.type) {
+    case actionTypes.GET_BALANCE:
+      return Object.assign({}, state, { balance: action.balance })
     case actionTypes.SIGNATURE_CHANGE:
     case actionTypes.SIGN_TRANSACTION:
       return Object.assign({}, state, { transaction: { signature: action.signature } })
     case actionTypes.SEND_TRANSACTION:
-      return Object.assign({}, state, { transaction: { ...state.transaction, hash: action.hash } })
+      return Object.assign({}, state, { balance: undefined, transaction: { ...state.transaction, hash: action.hash } })
     case actionTypes.NO_WALLET:
       return Object.assign({}, state, { wallet: undefined })
     case actionTypes.OPEN_WALLET:
@@ -39,7 +42,7 @@ export const reducer = (state = _initialState, action) => {
 // ACTIONS
 export const createWallet = (password) => dispatch => {
   dispatch({ type: actionTypes.NO_WALLET })
-  return fetch(`${process.env.API_URL}/wallet`, {
+  return fetch(`${process.env.API_URL}/wallet/create`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -79,8 +82,16 @@ export const noWallet = () => dispatch => {
   dispatch({ type: actionTypes.NO_WALLET })
 }
 
-export const getBalance = () => dispatch => {
-  dispatch({ type: actionTypes.GET_BALANCE })
+export const getBalance = (address) => dispatch => {
+  return fetch(`${process.env.NODE_URL}/balance`)
+  .then((response) => response.json())
+  .then((responseJson) => {
+    if (!responseJson.balance) {
+      return console.log(new Error('Sign transaction has failed!'))
+    }
+    dispatch({ type: actionTypes.GET_BALANCE, balance: responseJson.balance })
+  })
+  .catch(console.log)
 }
 
 export const signTransaction = (privateKey, password, recipient, transactionValue) => dispatch => {
@@ -109,12 +120,12 @@ export const sendTransaction = (signature) => dispatch => {
     },
     body: JSON.stringify(signature)
   })
-  .then((response) => ({data: response.json(), status: response.status}))
-  .then((result) => {
-    if (result.status !== 201 || !result.data.transactionHash) {
-      return console.log(new Error('Sign transaction has failed!'))
+  .then((response) => response.json())
+  .then((response) => {
+    if (!response.transactionHash) {
+      return console.log(new Error('Send transaction has failed!'))
     }
-    dispatch({ type: actionTypes.SEND_TRANSACTION, hash: result.data.transactionHash })
+    dispatch({ type: actionTypes.SEND_TRANSACTION, hash: response.transactionHash })
   })
   .catch(console.log)
 }

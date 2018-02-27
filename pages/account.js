@@ -6,8 +6,24 @@ import { initStore, getBalance } from '../store'
 import withRedux from 'next-redux-wrapper'
 
 class Account extends Component {
-  render () {
+  constructor () {
+    super()
+
+    this.getBalance = this.getBalance.bind(this)
+    this.balanceToString = this.balanceToString.bind(this)
+  }
+  getBalance () {
     const { wallet } = this.props
+    this.props.getBalance(wallet.address)
+  }
+  balanceToString (balance) {
+    return `Balance (confirmed): ${balance.confirmedBalance.balance}
+Balance (${balance.lastMinedBalance.confirmations} confirmation${balance.lastMinedBalance.confirmations > 1 ? 's' : ''}): ${balance.lastMinedBalance.balance}
+Balance (pending): ${balance.pendingBalance.balance}
+    `
+  }
+  render () {
+    const { wallet, balance } = this.props
     return (
       <Layout>
         <div>
@@ -17,9 +33,9 @@ class Account extends Component {
               <Form>
                 <Form.Group widths='equal'>
                   <Form.Input value={wallet ? wallet.address : ''} placeholder='Address' readOnly />
-                  <Form.Button floated='left'>Balance</Form.Button>
+                  <Form.Button floated='left' onClick={this.getBalance}>Balance</Form.Button>
                 </Form.Group>
-                <Form.TextArea />
+                <Form.TextArea value={balance ? this.balanceToString(balance) : undefined} readOnly />
               </Form>
             </Segment>
           </Container>
@@ -29,7 +45,7 @@ class Account extends Component {
   }
 }
 
-const mapStateToProps = ({ wallet }) => ({ wallet })
+const mapStateToProps = ({ wallet, balance }) => ({ wallet, balance })
 
 const mapDispatchToProps = (dispatch) => {
   return {

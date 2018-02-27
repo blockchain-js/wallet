@@ -37,8 +37,8 @@ class Open extends Component {
             <Segment color='grey'>
               <Header as='h4'>Open an Existing Wallet</Header>
               <Form>
-                <Form.Input placeholder='Password' value={this.state.password} type='password' onChange={this.handleChange('password')} />
                 <Form.Input placeholder='Private Key' value={this.state.privateKey} type='text' onChange={this.handleChange('privateKey')} />
+                <Form.Input placeholder='Password' value={this.state.password} type='password' onChange={this.handleChange('password')} />
                 <Form.Button onClick={this.openWallet}>Open</Form.Button>
                 <Form.TextArea rows={7} value={walletToText((wallet && !wallet.isNew) ? wallet : undefined)} readOnly />
               </Form>
