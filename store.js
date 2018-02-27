@@ -65,6 +65,10 @@ export const openWallet = (password, privateKey) => dispatch => {
   .catch(console.log)
 }
 
+export const noWallet = () => dispatch => {
+  dispatch({ type: actionTypes.NO_WALLET })
+}
+
 export const initStore = (initialState = _initialState) => {
   return createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunkMiddleware)))
 }
