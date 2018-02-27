@@ -7,7 +7,6 @@
 // HTTP status codes
 const status = require('http-status')
 const { celebrate, Joi } = require('celebrate')
-const walletUtils = require('../utils/wallet')
 const transactionUtils = require('../utils/transaction')
 
 module.exports = (app, options) => {
