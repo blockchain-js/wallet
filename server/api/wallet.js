@@ -18,9 +18,10 @@ module.exports = (app, options) => {
     }),
     async function (req, res, next) {
       try {
+        const wallet = await utils.createWallet(req.body.password)
         res.status(status.OK).send({
           ok: true,
-          wallet: utils.createWallet(req.body.password)
+          wallet
         })
       } catch (err) {
         next(err)
@@ -36,9 +37,10 @@ module.exports = (app, options) => {
     }),
     async function (req, res, next) {
       try {
+        const wallet = await utils.openWallet(req.body.password, req.body.privateKey)
         res.status(status.OK).send({
           ok: true,
-          wallet: utils.openWallet(req.body.password, req.body.privateKey)
+          wallet
         })
       } catch (err) {
         next(err)
