@@ -8,6 +8,7 @@ const bodyParser = require('body-parser')
 const status = require('http-status')
 
 const walletAPI = require('./api/wallet')
+const transactionAPI = require('./api/transaction')
 const error = require('./utils/error')
 
 const start = (options) => {
@@ -36,6 +37,9 @@ const start = (options) => {
 
     // Add wallet api to the express app
     walletAPI(app, options)
+
+    // Add transaction api to the express app
+    transactionAPI(app, options)
 
     // Handle the route through Next.js
     app.get('*', handle)

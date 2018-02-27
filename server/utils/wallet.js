@@ -10,11 +10,11 @@ module.exports.createWallet = (password) => {
       const publicKey = keyPair.getPublic().getX().toString(16) +
         (keyPair.getPublic().getY().isOdd() ? '1' : '0')
       const ripemd160 = new Hashes.RMD160()
-      const privateKey = await crypto.encrypt(keyPair.getPrivate().toString(16), password)
+      const encryptedPrivateKey = await crypto.encrypt(keyPair.getPrivate().toString(16), password)
 
       resolve({
         publicKey,
-        privateKey,
+        privateKey: encryptedPrivateKey,
         address: ripemd160.hex(publicKey)
       })
     } catch (e) {
@@ -23,19 +23,35 @@ module.exports.createWallet = (password) => {
   })
 }
 
-module.exports.openWallet = (password, privateKey) => {
+module.exports.openWallet = (password, encryptedPrivateKey) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const wallet = await decryptWallet(password, encryptedPrivateKey)
+
+      resolve({
+        publicKey: wallet.publicKey,
+        privateKey: encryptedPrivateKey,
+        address: wallet.address
+      })
+    } catch (e) {
+      reject(e)
+    }
+  })
+}
+
+const decryptWallet = module.exports.decryptWallet = (password, encryptedPrivateKey) => {
   return new Promise(async (resolve, reject) => {
     try {
       const ec = new EC('secp256k1')
-      const encryptedPrivateKey = await crypto.decrypt(privateKey, password)
-      const keyPair = ec.keyFromPrivate(encryptedPrivateKey)
+      const decryptedPrivateKey = await crypto.decrypt(encryptedPrivateKey, password)
+      const keyPair = ec.keyFromPrivate(decryptedPrivateKey)
       const publicKey = keyPair.getPublic().getX().toString(16) +
         (keyPair.getPublic().getY().isOdd() ? '1' : '0')
       const ripemd160 = new Hashes.RMD160()
 
       resolve({
         publicKey,
-        privateKey,
+        privateKey: keyPair.getPrivate().toString(16),
         address: ripemd160.hex(publicKey)
       })
     } catch (e) {

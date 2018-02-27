@@ -19,8 +19,7 @@ module.exports = (app, options) => {
     async function (req, res, next) {
       try {
         const wallet = await utils.createWallet(req.body.password)
-        res.status(status.OK).send({
-          ok: true,
+        res.status(status.CREATED).send({
           wallet
         })
       } catch (err) {
@@ -28,7 +27,7 @@ module.exports = (app, options) => {
       }
     })
 
-  app.put('/api/wallet',
+  app.post('/api/wallet/open',
     celebrate({
       body: Joi.object().keys({
         password: Joi.string().required(),
@@ -39,7 +38,6 @@ module.exports = (app, options) => {
       try {
         const wallet = await utils.openWallet(req.body.password, req.body.privateKey)
         res.status(status.OK).send({
-          ok: true,
           wallet
         })
       } catch (err) {
