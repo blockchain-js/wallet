@@ -42,7 +42,7 @@ export const reducer = (state = _initialState, action) => {
 // ACTIONS
 export const createWallet = (password) => dispatch => {
   dispatch({ type: actionTypes.NO_WALLET })
-  return fetch(`${process.env.API_URL}/wallet/create`, {
+  return fetch(`${process.env.API_URL}/wallets/create`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ export const createWallet = (password) => dispatch => {
 
 export const openWallet = (password, privateKey) => dispatch => {
   dispatch({ type: actionTypes.NO_WALLET })
-  return fetch(`${process.env.API_URL}/wallet/open`, {
+  return fetch(`${process.env.API_URL}/wallets/open`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -83,7 +83,7 @@ export const noWallet = () => dispatch => {
 }
 
 export const getBalance = (address) => dispatch => {
-  return fetch(`${process.env.NODE_URL}/balance`)
+  return fetch(`${process.env.NODE_URL}/balance/${address}`)
   .then((response) => response.json())
   .then((responseJson) => {
     if (!responseJson.balance) {
@@ -95,7 +95,7 @@ export const getBalance = (address) => dispatch => {
 }
 
 export const signTransaction = (privateKey, password, recipient, transactionValue) => dispatch => {
-  return fetch(`${process.env.API_URL}/transaction/sign`, {
+  return fetch(`${process.env.API_URL}/transactions/sign`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -113,7 +113,7 @@ export const signTransaction = (privateKey, password, recipient, transactionValu
 }
 
 export const sendTransaction = (signature) => dispatch => {
-  return fetch(`${process.env.NODE_URL}/transaction/send`, {
+  return fetch(`${process.env.NODE_URL}/transactions/send`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

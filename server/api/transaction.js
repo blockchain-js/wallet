@@ -10,7 +10,7 @@ const { celebrate, Joi } = require('celebrate')
 const transactionUtils = require('../utils/transaction')
 
 module.exports = (app, options) => {
-  app.post('/api/transaction/sign',
+  app.post('/api/transactions/sign',
     celebrate({
       body: Joi.object().keys({
         password: Joi.string().required(),

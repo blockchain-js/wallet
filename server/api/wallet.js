@@ -10,7 +10,7 @@ const { celebrate, Joi } = require('celebrate')
 const utils = require('../utils/wallet')
 
 module.exports = (app, options) => {
-  app.post('/api/wallet/create',
+  app.post('/api/wallets/create',
     celebrate({
       body: Joi.object().keys({
         password: Joi.string().required()
@@ -27,7 +27,7 @@ module.exports = (app, options) => {
       }
     })
 
-  app.post('/api/wallet/open',
+  app.post('/api/wallets/open',
     celebrate({
       body: Joi.object().keys({
         password: Joi.string().required(),
