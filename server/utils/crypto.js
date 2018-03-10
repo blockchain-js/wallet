@@ -45,7 +45,7 @@ module.exports.decrypt = (text, password) => {
 module.exports.createHash = (data) => {
   return new Promise((resolve, reject) => {
     try {
-      resolve(crypto.createHash('sha256').update(data).digest())
+      resolve(crypto.createHash('sha256').update(data).digest('hex'))
     } catch (e) {
       reject(e)
     }

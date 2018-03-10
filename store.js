@@ -1,3 +1,4 @@
+/* global alert */
 import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunkMiddleware from 'redux-thunk'
@@ -52,6 +53,7 @@ export const createWallet = (password) => dispatch => {
   .then((response) => response.json())
   .then((responseJson) => {
     if (!responseJson.wallet) {
+      alert('Create wallet has failed!')
       return console.log(new Error('Create wallet has failed!'))
     }
     dispatch({ type: actionTypes.CREATE_WALLET, wallet: responseJson.wallet })
@@ -71,6 +73,7 @@ export const openWallet = (password, privateKey) => dispatch => {
   .then((response) => response.json())
   .then((responseJson) => {
     if (!responseJson.wallet) {
+      alert('Open wallet has failed!')
       return console.log(new Error('Open wallet has failed!'))
     }
     dispatch({ type: actionTypes.OPEN_WALLET, wallet: responseJson.wallet })
@@ -87,6 +90,7 @@ export const getBalance = (address) => dispatch => {
   .then((response) => response.json())
   .then((responseJson) => {
     if (!responseJson.balance) {
+      alert('Sign transaction has failed!')
       return console.log(new Error('Sign transaction has failed!'))
     }
     dispatch({ type: actionTypes.GET_BALANCE, balance: responseJson.balance })
@@ -105,6 +109,7 @@ export const signTransaction = (privateKey, password, recipient, transactionValu
   .then((response) => response.json())
   .then((responseJson) => {
     if (!responseJson.signature) {
+      alert('Sign transaction has failed!')
       return console.log(new Error('Sign transaction has failed!'))
     }
     dispatch({ type: actionTypes.SIGN_TRANSACTION, signature: responseJson.signature })
@@ -123,6 +128,7 @@ export const sendTransaction = (signature) => dispatch => {
   .then((response) => response.json())
   .then((response) => {
     if (!response.transactionHash) {
+      alert('Send transaction has failed!')
       return console.log(new Error('Send transaction has failed!'))
     }
     dispatch({ type: actionTypes.SEND_TRANSACTION, hash: response.transactionHash })

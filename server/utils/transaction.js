@@ -12,14 +12,15 @@ module.exports.signTransaction = (password, encryptedPrivateKey, recipient, tran
         senderPubKey: wallet.publicKey,
         value: transactionValue,
         fee: process.env.TRANSACTION_FEE,
-        dateCreated: new Date()
+        dateCreated: new Date().getTime()
       }
       const ec = new EC('secp256k1')
-      const key = ec.genKeyPair()
+      const privateKey = ec.keyFromPrivate(wallet.privateKey, 'hex')
 
       const shaMsg = await crypto.createHash(JSON.stringify(transactionData))
-      const signature = key.sign(shaMsg, wallet.privateKey)
-      const isValid = key.verify(shaMsg, signature, wallet.publicKey)
+      const signature = ec.sign(shaMsg, privateKey)
+      const publicKey = ec.keyFromPublic(wallet.publicKey, 'hex')
+      const isValid = publicKey.verify(shaMsg, signature)
       if (isValid) {
         resolve(Object.assign({}, transactionData, { senderSignature: [signature.r.toJSON(), signature.s.toJSON()] }))
       } else {

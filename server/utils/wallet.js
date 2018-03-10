@@ -7,8 +7,7 @@ module.exports.createWallet = (password) => {
     try {
       const ec = new EC('secp256k1')
       const keyPair = ec.genKeyPair()
-      const publicKey = keyPair.getPublic().getX().toString(16) +
-        (keyPair.getPublic().getY().isOdd() ? '1' : '0')
+      const publicKey = keyPair.getPublic().encode('hex')
       const ripemd160 = new Hashes.RMD160()
       const encryptedPrivateKey = await crypto.encrypt(keyPair.getPrivate().toString(16), password)
 
@@ -45,8 +44,7 @@ const decryptWallet = module.exports.decryptWallet = (password, encryptedPrivate
       const ec = new EC('secp256k1')
       const decryptedPrivateKey = await crypto.decrypt(encryptedPrivateKey, password)
       const keyPair = ec.keyFromPrivate(decryptedPrivateKey)
-      const publicKey = keyPair.getPublic().getX().toString(16) +
-        (keyPair.getPublic().getY().isOdd() ? '1' : '0')
+      const publicKey = keyPair.getPublic().encode('hex')
       const ripemd160 = new Hashes.RMD160()
 
       resolve({

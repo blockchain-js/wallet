@@ -6,7 +6,7 @@ import { initStore, sendTransaction, signTransaction, signatureChange } from '..
 import withRedux from 'next-redux-wrapper'
 
 class Transactions extends Component {
-  constructor () {
+  constructor() {
     super()
 
     this.state = {
@@ -19,12 +19,12 @@ class Transactions extends Component {
     this.transactionHashToString = this.transactionHashToString.bind(this)
     this.handleChangeSignature = this.handleChangeSignature.bind(this)
   }
-  handleChange (name) {
+  handleChange(name) {
     return (e, { value }) => {
       this.setState({ [name]: value })
     }
   }
-  handleChangeSignature (e, { value }) {
+  handleChangeSignature(e, { value }) {
     try {
       const parsed = JSON.parse(value)
       this.props.signatureChange(parsed)
@@ -32,7 +32,7 @@ class Transactions extends Component {
       console.log('JSON parse: Wrong signature')
     }
   }
-  signTransaction () {
+  signTransaction() {
     const { wallet } = this.props
     const { recipient, transactionValue, password } = this.state
     this.props.signTransaction(wallet.privateKey, password, recipient, transactionValue)
@@ -40,19 +40,22 @@ class Transactions extends Component {
         this.setState({ password: '' })
       })
   }
-  sendTransaction () {
-    const { transaction } = this.props
+  sendTransaction() {
+    const { transaction, wallet } = this.props
+    if (wallet.address !== transaction.signature.from) {
+      return alert('Wrong password!')
+    }
     this.props.sendTransaction(transaction.signature)
       .then(() => {
         this.setState({ recipient: '', transactionValue: '' })
       })
   }
-  transactionHashToString (transaction) {
+  transactionHashToString(transaction) {
     return `Transaction successfully sent.
 Transaction hash: ${transaction.hash}
     `
   }
-  render () {
+  render() {
     const { transaction, wallet } = this.props
     return (
       <Layout>
